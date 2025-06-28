@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowDown, Github, Linkedin, Mail } from 'lucide-react';
+import { ArrowDown, Github, Linkedin, Mail, Youtube } from 'lucide-react';
 
 const Hero: React.FC = () => {
   const scrollToAbout = () => {
@@ -31,28 +31,37 @@ const Hero: React.FC = () => {
           </h1>
           
           <p className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto">
-            Web Developer specializing in modern web technologies, 
-            full-stack development, and creating exceptional user experiences
+           Web Developer specializing in backend development, scalable system design, and API architecture — with additional experience in modern frontend technologies to support seamless full-stack solutions.
           </p>
           
           <div className="flex justify-center space-x-6 mt-8">
             <a
               href="mailto:fardan.nozami@example.com"
-              className="p-3 bg-blue-600 hover:bg-blue-700 rounded-full transition-colors duration-300 group"
+              className="p-3 bg-gray-800 hover:bg-gray-700  rounded-full transition-colors duration-300 group"
+              target='blank'
             >
               <Mail size={24} className="group-hover:scale-110 transition-transform duration-300" />
             </a>
             <a
               href="https://github.com/fardannozami"
               className="p-3 bg-gray-800 hover:bg-gray-700 rounded-full transition-colors duration-300 group"
+              target='blank'
             >
               <Github size={24} className="group-hover:scale-110 transition-transform duration-300" />
             </a>
             <a
               href="https://www.linkedin.com/in/cah-bantul"
-              className="p-3 bg-blue-700 hover:bg-blue-800 rounded-full transition-colors duration-300 group"
+              className="p-3 bg-gray-800 hover:bg-gray-700  rounded-full transition-colors duration-300 group"
+              target='blank'
             >
               <Linkedin size={24} className="group-hover:scale-110 transition-transform duration-300" />
+            </a>
+            <a
+              href="http://youtube.com/@programmertelo"
+              className="p-3 bg-gray-800 hover:bg-gray-700  rounded-full transition-colors duration-300 group"
+              target='blank'
+            >
+              <Youtube size={24} className="group-hover:scale-110 transition-transform duration-300" />
             </a>
           </div>
           

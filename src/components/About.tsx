@@ -36,15 +36,11 @@ const About: React.FC = () => {
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="space-y-6">
               <p className="text-lg text-gray-300 leading-relaxed">
-                I'm a passionate web developer with experience in creating modern, 
-                responsive web applications. I specialize in both frontend and backend 
-                development, with a strong focus on user experience and clean, maintainable code.
+                I'm a passionate backend web developer with experience in building scalable, efficient, and secure web applications. I specialize in designing robust APIs, managing databases, and implementing server-side logic with a strong emphasis on performance and clean architecture.
               </p>
               
               <p className="text-lg text-gray-300 leading-relaxed">
-                My journey in web development has led me to work with various technologies 
-                and frameworks. I enjoy solving complex problems and turning creative ideas 
-                into functional, beautiful web applications that users love to interact with.
+                While my core expertise lies in backend development, I also have experience in frontend technologies, enabling me to collaborate effectively across the full stack and ensure seamless integration between frontend and backend components. I enjoy solving complex challenges and building systems that are both powerful and maintainable.
               </p>
               
               <div className="flex flex-wrap gap-3 mt-6">
