@@ -4,44 +4,49 @@ import { Briefcase, Calendar, MapPin } from 'lucide-react';
 const Experience: React.FC = () => {
   const experiences = [
     {
-      title: 'Web Developer',
-      company: 'Freelance',
+      title: 'Backend Developer',
+      company: 'PT Digdaya Companies',
       location: 'Remote',
       period: '2023 - Present',
-      description: 'Working as a freelance web developer, creating custom websites and web applications for various clients. Specializing in modern web technologies and responsive design.',
+      description: 'At PT Digdaya Companies, I played a key role in developing and maintaining high-performance web applications as a Backend Developer. My expertise lies in Golang, Postgres database, and containerization using Docker. I was responsible for building scalable solutions, optimizing database performance, and ensuring seamless deployment of applications on AWS EC2 instances, contributing to efficient and reliable system operations. Additionally, I implemented CI/CD pipelines using GitHub Actions to automate testing and deployment, ensuring smooth and efficient software delivery.',
       achievements: [
-        'Developed 15+ responsive websites for small to medium businesses',
-        'Implemented modern UI/UX designs with high client satisfaction',
-        'Optimized website performance resulting in 40% faster load times',
-        'Integrated payment systems and e-commerce functionality'
+        'Built and maintained scalable backend services using Golang',
+        'Optimized Postgres queries and database structure for performance',
+        'Containerized applications using Docker for consistency and portability',
+        'Deployed and managed applications on AWS EC2 instances',
+        'Implemented CI/CD pipelines with GitHub Actions for automated testing and deployment'
       ]
     },
     {
-      title: 'Frontend Developer',
-      company: 'Tech Startup',
-      location: 'Jakarta, Indonesia',
-      period: '2022 - 2023',
-      description: 'Contributed to the development of web applications using React and modern frontend technologies. Collaborated with design and backend teams to deliver high-quality user experiences.',
+      title: 'Backend Developer',
+      company: 'PT Inosoft',
+      location: 'Remote',
+      period: 'Aug 2022 - Aug 2023',
+      description: 'I was responsible for developing and maintaining the backend of web applications using Laravel and MySQL. My role included designing and optimizing database structures, developing RESTful APIs for seamless integration with third-party services, and ensuring application performance and security. Additionally, I implemented bug fixes, added new features, and used Git for version control to manage code efficiently.',
       achievements: [
-        'Built responsive web applications using React and TypeScript',
-        'Collaborated with UI/UX designers to implement pixel-perfect designs',
-        'Improved application performance by 30% through code optimization',
-        'Mentored junior developers and conducted code reviews'
+        'Developed and maintained backend systems using Laravel and MySQL',
+        'Designed and optimized database schemas for performance and scalability',
+        'Built RESTful APIs to integrate with third-party services',
+        'Improved application performance and security through best practices',
+        'Collaborated with team using Git for efficient version control and code management'
       ]
     },
     {
-      title: 'Junior Web Developer',
-      company: 'Digital Agency',
-      location: 'Bandung, Indonesia',
-      period: '2021 - 2022',
-      description: 'Started my professional journey as a junior web developer, learning modern web development practices and contributing to various client projects.',
+      title: 'Node.js Developer',
+      company: 'PT Sambung Digital Indonesia',
+      location: 'Remote',
+      period: 'Jan 2022 - Dec 2022',
+      description: 'I worked as a Node.js Developer, responsible for developing backend applications using Node.js with Express.js, PostgreSQL, and EJS for templating. I designed REST APIs for web services and managed the deployment of applications on AWS EC2 instances. Additionally, I provided technical support to the development team and assisted in debugging issues faced during product rollout.',
       achievements: [
-        'Developed and maintained client websites using HTML, CSS, and JavaScript',
-        'Learned and implemented responsive design principles',
-        'Collaborated with senior developers on larger projects',
-        'Gained experience with version control and agile development practices'
+        'Developed backend applications using Node.js, Express.js, PostgreSQL, and EJS',
+        'Designed and implemented REST APIs for scalable web services',
+        'Managed application deployment on AWS EC2 instances',
+        'Provided technical support and debugging during product rollout',
+        'Enhanced expertise in backend development and cloud deployment practices'
       ]
-    }
+    },
+
+
   ];
 
   return (
@@ -51,17 +56,17 @@ const Experience: React.FC = () => {
           <h2 className="text-4xl md:text-5xl font-bold text-center mb-16">
             Work <span className="bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">Experience</span>
           </h2>
-          
+
           <div className="relative">
             {/* Timeline line */}
             <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-blue-500 to-purple-600"></div>
-            
+
             <div className="space-y-12">
               {experiences.map((exp, index) => (
                 <div key={index} className="relative flex items-start">
                   {/* Timeline dot */}
                   <div className="absolute left-6 w-4 h-4 bg-blue-500 rounded-full border-4 border-gray-950 z-10"></div>
-                  
+
                   {/* Content */}
                   <div className="ml-20 bg-gray-800 rounded-xl p-8 border border-gray-700 hover:border-blue-500/50 transition-all duration-300 group w-full">
                     <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-4">
@@ -74,7 +79,7 @@ const Experience: React.FC = () => {
                           {exp.company}
                         </div>
                       </div>
-                      
+
                       <div className="flex flex-col lg:items-end space-y-1">
                         <div className="flex items-center text-gray-400">
                           <Calendar size={16} className="mr-2" />
@@ -86,11 +91,11 @@ const Experience: React.FC = () => {
                         </div>
                       </div>
                     </div>
-                    
+
                     <p className="text-gray-300 mb-6 leading-relaxed">
                       {exp.description}
                     </p>
-                    
+
                     <div>
                       <h4 className="text-blue-400 font-semibold mb-3">Key Achievements</h4>
                       <ul className="space-y-2">
