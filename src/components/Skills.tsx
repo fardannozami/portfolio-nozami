@@ -3,49 +3,41 @@ import React from 'react';
 const Skills: React.FC = () => {
   const skillCategories = [
     {
-      title: 'Frontend Technologies',
-      skills: [
-        { name: 'JavaScript', level: 90 },
-        { name: 'React', level: 85 },
-        { name: 'HTML5', level: 95 },
-        { name: 'CSS3', level: 90 },
-        { name: 'Tailwind CSS', level: 85 },
-        { name: 'Bootstrap', level: 80 }
-      ]
-    },
-    {
       title: 'Backend Technologies',
       skills: [
-        { name: 'Node.js', level: 80 },
-        { name: 'PHP', level: 85 },
-        { name: 'Express.js', level: 75 },
-        { name: 'Laravel', level: 70 },
-        { name: 'REST APIs', level: 85 },
-        { name: 'GraphQL', level: 65 }
+        { name: 'Node.js', level: 'Intermediate' },
+        { name: 'PHP', level: 'Intermediate' },
+        { name: 'Express.js', level: 'Intermediate' },
+        { name: 'Laravel', level: 'Intermediate' },
+        { name: 'REST APIs', level: 'Expert' },
+        { name: 'Python', level: 'Beginner' }
       ]
     },
     {
-      title: 'Database & Tools',
+      title: 'Frontend Technologies',
       skills: [
-        { name: 'MySQL', level: 85 },
-        { name: 'PostgreSQL', level: 75 },
-        { name: 'MongoDB', level: 70 },
-        { name: 'Git', level: 90 },
-        { name: 'Docker', level: 65 },
-        { name: 'AWS', level: 60 }
+        { name: 'JavaScript', level: 'Intermediate' },
+        { name: 'React', level: 'Intermediate' },
+        { name: 'TypeScript', level: 'Intermediate' },
+        { name: 'Tailwind CSS', level: 'Beginner' }
       ]
     },
     {
-      title: 'Design & Others',
+      title: 'Database',
       skills: [
-        { name: 'Figma', level: 75 },
-        { name: 'Adobe XD', level: 70 },
-        { name: 'Responsive Design', level: 90 },
-        { name: 'UI/UX Design', level: 80 },
-        { name: 'Testing', level: 75 },
-        { name: 'Agile/Scrum', level: 80 }
+        { name: 'MySQL', level: 'Intermediate' },
+        { name: 'PostgreSQL', level: 'Intermediate' },
+        { name: 'MongoDB', level: 'Beginner' },
       ]
-    }
+    },
+    {
+      title: 'DevOps',
+      skills: [
+        { name: 'Docker', level: 'Intermediate' },
+        { name: 'Git', level: 'Expert' },
+        { name: 'AWS', level: 'Intermediate' }
+      ]
+    },
   ];
 
   return (
@@ -66,13 +58,20 @@ const Skills: React.FC = () => {
                     <div key={skillIndex} className="group">
                       <div className="flex justify-between items-center mb-2">
                         <span className="text-gray-300 font-medium">{skill.name}</span>
-                        <span className="text-gray-400 text-sm">{skill.level}%</span>
+                        <span className={`text-sm font-medium px-3 py-1 rounded-full ${
+                          skill.level === 'Expert' ? 'bg-green-500/20 text-green-400' : 
+                          skill.level === 'Intermediate' ? 'bg-blue-500/20 text-blue-400' : 
+                          'bg-yellow-500/20 text-yellow-400'
+                        }`}>{skill.level}</span>
                       </div>
                       
                       <div className="w-full bg-gray-800 rounded-full h-2 overflow-hidden">
                         <div
-                          className="h-full bg-gradient-to-r from-blue-500 to-purple-600 rounded-full transition-all duration-1000 ease-out group-hover:shadow-lg group-hover:shadow-blue-500/50"
-                          style={{ width: `${skill.level}%` }}
+                          className={`h-full rounded-full transition-all duration-1000 ease-out group-hover:shadow-lg ${
+                            skill.level === 'Expert' ? 'bg-green-500 w-full group-hover:shadow-green-500/50' : 
+                            skill.level === 'Intermediate' ? 'bg-blue-500 w-3/4 group-hover:shadow-blue-500/50' : 
+                            'bg-yellow-500 w-1/2 group-hover:shadow-yellow-500/50'
+                          }`}
                         ></div>
                       </div>
                     </div>
