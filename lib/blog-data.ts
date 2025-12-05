@@ -9,6 +9,10 @@ export interface BlogPost {
   image?: string
 }
 
+const HASHNODE_ENDPOINT = "https://gql.hashnode.com/"
+const HASHNODE_HOST = process.env.HASHNODE_HOST
+const HASHNODE_REVALIDATE_SECONDS = 3600
+
 export const blogPosts: BlogPost[] = [
   {
     slug: "building-scalable-rest-api-laravel",
@@ -237,10 +241,178 @@ Regular monitoring and optimization ensure your PostgreSQL database performs opt
   },
 ]
 
-export function getBlogPost(slug: string): BlogPost | undefined {
+const HASHNODE_POSTS_QUERY = `
+  query PublicationPosts($host: String!) {
+    publication(host: $host) {
+      posts(first: 20) {
+        edges {
+          node {
+            slug
+            title
+            brief
+            publishedAt
+            readTimeInMinutes
+            tags {
+              name
+            }
+            coverImage {
+              url
+            }
+            content {
+              markdown
+            }
+          }
+        }
+      }
+    }
+  }
+`
+
+const HASHNODE_POST_QUERY = `
+  query PublicationPost($host: String!, $slug: String!) {
+    publication(host: $host) {
+      post(slug: $slug) {
+        slug
+        title
+        brief
+        publishedAt
+        readTimeInMinutes
+        tags {
+          name
+        }
+        coverImage {
+          url
+        }
+        content {
+          markdown
+        }
+      }
+    }
+  }
+`
+
+type HashnodePost = {
+  slug: string
+  title: string
+  brief: string
+  publishedAt: string
+  readTimeInMinutes?: number | null
+  tags?: { name?: string | null }[] | null
+  coverImage?: { url?: string | null } | null
+  content?: { markdown?: string | null } | null
+}
+
+type HashnodePostsResponse = {
+  publication?: {
+    posts?: {
+      edges?: {
+        node?: HashnodePost | null
+      }[]
+    } | null
+  } | null
+}
+
+type HashnodePostResponse = {
+  publication?: {
+    post?: HashnodePost | null
+  } | null
+}
+
+async function requestHashnode<T>(query: string, variables: Record<string, unknown>): Promise<T | null> {
+  if (!HASHNODE_HOST) {
+    return null
+  }
+
+  try {
+    const response = await fetch(HASHNODE_ENDPOINT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ query, variables }),
+      next: { revalidate: HASHNODE_REVALIDATE_SECONDS },
+    })
+
+    if (!response.ok) {
+      throw new Error(`Hashnode request failed with status ${response.status}`)
+    }
+
+    const json = (await response.json()) as { data?: T; errors?: { message: string }[] }
+
+    if (json.errors?.length) {
+      throw new Error(json.errors.map((error) => error.message).join(", "))
+    }
+
+    return json.data ?? null
+  } catch (error) {
+    console.error("[hashnode] failed to fetch data", error)
+    return null
+  }
+}
+
+function mapHashnodePost(node: HashnodePost | null | undefined): BlogPost | null {
+  if (!node?.slug || !node.title) {
+    return null
+  }
+
+  return {
+    slug: node.slug,
+    title: node.title,
+    excerpt: node.brief || node.title,
+    content: node.content?.markdown ?? "",
+    date: node.publishedAt,
+    readTime: node.readTimeInMinutes ? `${node.readTimeInMinutes} min read` : "5 min read",
+    tags: (node.tags ?? []).map((tag) => tag?.name).filter(Boolean) as string[],
+    image: node.coverImage?.url ?? undefined,
+  }
+}
+
+async function fetchHashnodePosts(): Promise<BlogPost[]> {
+  const data = await requestHashnode<HashnodePostsResponse>(HASHNODE_POSTS_QUERY, { host: HASHNODE_HOST })
+
+  if (!data?.publication?.posts?.edges?.length) {
+    return []
+  }
+
+  const posts =
+    data.publication.posts.edges
+      ?.map((edge) => mapHashnodePost(edge?.node))
+      .filter(Boolean)
+      .map((post) => post as BlogPost) ?? []
+
+  return posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+}
+
+async function fetchHashnodePost(slug: string): Promise<BlogPost | undefined> {
+  const list = await fetchHashnodePosts()
+  const cached = list.find((post) => post.slug === slug && post.content)
+
+  if (cached) {
+    return cached
+  }
+
+  const data = await requestHashnode<HashnodePostResponse>(HASHNODE_POST_QUERY, { host: HASHNODE_HOST, slug })
+  const post = mapHashnodePost(data?.publication?.post)
+
+  return post ?? undefined
+}
+
+export async function getBlogPost(slug: string): Promise<BlogPost | undefined> {
+  const hashnodePost = await fetchHashnodePost(slug)
+
+  if (hashnodePost) {
+    return hashnodePost
+  }
+
   return blogPosts.find((post) => post.slug === slug)
 }
 
-export function getAllBlogPosts(): BlogPost[] {
-  return blogPosts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+export async function getAllBlogPosts(): Promise<BlogPost[]> {
+  const hashnodePosts = await fetchHashnodePosts()
+
+  if (hashnodePosts.length) {
+    return hashnodePosts
+  }
+
+  return [...blogPosts].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 }

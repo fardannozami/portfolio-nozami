@@ -7,18 +7,29 @@ import { Badge } from "@/components/ui/badge"
 import { Calendar, Clock, ArrowLeft } from "lucide-react"
 import { getBlogPost, getAllBlogPosts } from "@/lib/blog-data"
 
+type BlogPostParams = { slug: string }
+
 interface BlogPostPageProps {
-  params: Promise<{ slug: string }>
+  params: BlogPostParams | Promise<BlogPostParams>
+}
+
+export const revalidate = 3600
+
+async function resolveParams(params: BlogPostPageProps["params"]): Promise<BlogPostParams> {
+  if (typeof (params as Promise<BlogPostParams>).then === "function") {
+    return params as Promise<BlogPostParams>
+  }
+  return params as BlogPostParams
 }
 
 export async function generateStaticParams() {
-  const posts = getAllBlogPosts()
+  const posts = await getAllBlogPosts()
   return posts.map((post) => ({ slug: post.slug }))
 }
 
 export async function generateMetadata({ params }: BlogPostPageProps) {
-  const { slug } = await params
-  const post = getBlogPost(slug)
+  const { slug } = await resolveParams(params)
+  const post = await getBlogPost(slug)
 
   if (!post) {
     return { title: "Post Not Found" }
@@ -31,8 +42,8 @@ export async function generateMetadata({ params }: BlogPostPageProps) {
 }
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
-  const { slug } = await params
-  const post = getBlogPost(slug)
+  const { slug } = await resolveParams(params)
+  const post = await getBlogPost(slug)
 
   if (!post) {
     notFound()
@@ -78,6 +89,17 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               </span>
             </div>
           </header>
+
+          {post.image && (
+            <div className="mb-10 overflow-hidden rounded-xl border border-border bg-muted">
+              <img
+                src={post.image}
+                alt={post.title}
+                loading="lazy"
+                className="w-full h-[320px] object-cover"
+              />
+            </div>
+          )}
 
           <div className="prose-custom">
             <MarkdownRenderer content={post.content} />

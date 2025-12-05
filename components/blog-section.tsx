@@ -4,8 +4,8 @@ import { Badge } from "@/components/ui/badge"
 import { ArrowRight, Calendar, Clock } from "lucide-react"
 import { getAllBlogPosts } from "@/lib/blog-data"
 
-export function BlogSection() {
-  const posts = getAllBlogPosts().slice(0, 3)
+export async function BlogSection() {
+  const posts = (await getAllBlogPosts()).slice(0, 3)
 
   return (
     <section className="py-20" id="blog">
@@ -24,41 +24,55 @@ export function BlogSection() {
           </Link>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {posts.map((post) => (
-            <Link key={post.slug} href={`/blog/${post.slug}`}>
-              <Card className="h-full bg-card border-border hover:border-primary/50 transition-all hover:-translate-y-1 cursor-pointer group">
-                <CardContent className="p-6 flex flex-col h-full">
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {post.tags.map((tag) => (
-                      <Badge key={tag} variant="secondary" className="text-xs">
-                        {tag}
-                      </Badge>
-                    ))}
-                  </div>
-                  <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:text-primary transition-colors line-clamp-2">
-                    {post.title}
-                  </h3>
-                  <p className="text-muted-foreground text-sm mb-4 flex-grow line-clamp-3">{post.excerpt}</p>
-                  <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                    <span className="flex items-center gap-1">
-                      <Calendar className="h-3.5 w-3.5" />
-                      {new Date(post.date).toLocaleDateString("id-ID", {
-                        day: "numeric",
-                        month: "short",
-                        year: "numeric",
-                      })}
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <Clock className="h-3.5 w-3.5" />
-                      {post.readTime}
-                    </span>
-                  </div>
-                </CardContent>
-              </Card>
-            </Link>
-          ))}
-        </div>
+        {posts.length ? (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {posts.map((post) => (
+              <Link key={post.slug} href={`/blog/${post.slug}`}>
+                <Card className="h-full bg-card border-border hover:border-primary/50 transition-all hover:-translate-y-1 cursor-pointer group">
+                  <CardContent className="p-6 flex flex-col h-full">
+                    {post.image && (
+                      <div className="mb-4 h-40 overflow-hidden rounded-lg border border-border/60 bg-muted">
+                        <img
+                          src={post.image}
+                          alt={post.title}
+                          loading="lazy"
+                          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                        />
+                      </div>
+                    )}
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {post.tags.map((tag) => (
+                        <Badge key={tag} variant="secondary" className="text-xs">
+                          {tag}
+                        </Badge>
+                      ))}
+                    </div>
+                    <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:text-primary transition-colors line-clamp-2">
+                      {post.title}
+                    </h3>
+                    <p className="text-muted-foreground text-sm mb-4 flex-grow line-clamp-3">{post.excerpt}</p>
+                    <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                      <span className="flex items-center gap-1">
+                        <Calendar className="h-3.5 w-3.5" />
+                        {new Date(post.date).toLocaleDateString("id-ID", {
+                          day: "numeric",
+                          month: "short",
+                          year: "numeric",
+                        })}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <Clock className="h-3.5 w-3.5" />
+                        {post.readTime}
+                      </span>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <p className="text-muted-foreground">Belum ada artikel yang tersedia.</p>
+        )}
 
         <Link
           href="/blog"
