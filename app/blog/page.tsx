@@ -6,6 +6,16 @@ import { Badge } from "@/components/ui/badge"
 import { Calendar, Clock, ArrowLeft } from "lucide-react"
 import { getAllBlogPosts } from "@/lib/blog-data"
 
+type SearchParams =
+  | { page?: string | string[] }
+  | Promise<{
+      page?: string | string[]
+    }>
+
+interface BlogPageProps {
+  searchParams?: SearchParams
+}
+
 export const revalidate = 3600
 
 export const metadata = {
@@ -13,8 +23,21 @@ export const metadata = {
   description: "Technical articles about backend development, Laravel, Golang, Node.js, and database optimization.",
 }
 
-export default async function BlogPage() {
+export default async function BlogPage({ searchParams }: BlogPageProps) {
+  const resolvedSearchParams = typeof searchParams === "object" && searchParams && "then" in searchParams
+    ? await searchParams
+    : (searchParams as SearchParams | undefined)
+
   const posts = await getAllBlogPosts()
+  const pageSize = 10
+  const totalPages = Math.max(1, Math.ceil(posts.length / pageSize))
+  const pageParam = Array.isArray(resolvedSearchParams?.page)
+    ? resolvedSearchParams?.page[0]
+    : resolvedSearchParams?.page
+  const requestedPage = Number(pageParam) || 1
+  const currentPage = Math.min(Math.max(1, requestedPage), totalPages)
+  const start = (currentPage - 1) * pageSize
+  const pagedPosts = posts.slice(start, start + pageSize)
 
   return (
     <main className="min-h-screen bg-background">
@@ -36,12 +59,12 @@ export default async function BlogPage() {
               Sharing my knowledge and experience in backend development, database optimization, and software
               architecture.
             </p>
-          </div>
+        </div>
 
           {posts.length ? (
             <div className="space-y-6">
-              {posts.map((post) => (
-                <Link key={post.slug} href={`/blog/${post.slug}`}>
+              {pagedPosts.map((post) => (
+                <Link key={post.slug} href={`/${post.slug}`}>
                   <Card className="bg-card border-border hover:border-primary/50 transition-all hover:-translate-y-0.5 cursor-pointer group">
                     <CardContent className="p-6">
                       {post.image && (
@@ -86,6 +109,35 @@ export default async function BlogPage() {
             </div>
           ) : (
             <p className="text-muted-foreground">Belum ada artikel yang bisa ditampilkan.</p>
+          )}
+
+          {posts.length > pageSize && (
+            <div className="flex items-center justify-between mt-10 text-sm text-muted-foreground">
+              <Link
+                href={`/blog?page=${Math.max(1, currentPage - 1)}`}
+                className={`px-3 py-2 rounded-md border border-border ${
+                  currentPage === 1 ? "pointer-events-none opacity-50" : "hover:border-primary/60 hover:text-foreground"
+                }`}
+              >
+                Sebelumnya
+              </Link>
+              <div className="flex items-center gap-2">
+                <span>Halaman</span>
+                <span className="font-semibold text-foreground">
+                  {currentPage} / {totalPages}
+                </span>
+              </div>
+              <Link
+                href={`/blog?page=${Math.min(totalPages, currentPage + 1)}`}
+                className={`px-3 py-2 rounded-md border border-border ${
+                  currentPage === totalPages
+                    ? "pointer-events-none opacity-50"
+                    : "hover:border-primary/60 hover:text-foreground"
+                }`}
+              >
+                Selanjutnya
+              </Link>
+            </div>
           )}
         </div>
       </div>

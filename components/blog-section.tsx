@@ -27,7 +27,7 @@ export async function BlogSection() {
         {posts.length ? (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {posts.map((post) => (
-              <Link key={post.slug} href={`/blog/${post.slug}`}>
+              <Link key={post.slug} href={`/${post.slug}`}>
                 <Card className="h-full bg-card border-border hover:border-primary/50 transition-all hover:-translate-y-1 cursor-pointer group">
                   <CardContent className="p-6 flex flex-col h-full">
                     {post.image && (
