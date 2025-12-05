@@ -1,1 +1,2 @@
-export { default, generateMetadata, generateStaticParams, revalidate } from "../../[slug]/page"
+export { default, generateMetadata, generateStaticParams } from "../../[slug]/page"
+export const revalidate = 3600
