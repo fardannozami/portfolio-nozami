@@ -1,5 +1,3 @@
-"use client"
-
 import type React from "react"
 
 import { CodeBlock } from "./code-block"
@@ -21,6 +19,9 @@ function formatInline(text: string) {
 
   // Bold text wrapped with **...**
   rendered = rendered.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+
+  // Unescape ordered-list style markers like "2\." that may come from external sources
+  rendered = rendered.replace(/(\d+)\\\./g, "$1.")
 
   // Restore inline code blocks
   placeholders.forEach((html, index) => {
@@ -53,6 +54,33 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
 
         parts.push(<CodeBlock key={i} code={codeLines.join("\n").trim()} language={language} />)
         i++
+        continue
+      }
+
+      // Ordered list (supports escaped markers like "1\.")
+      const orderedMatch = line.match(/^(\d+)\\?\.\s+(.*)$/)
+      if (orderedMatch) {
+        const startNumber = Number(orderedMatch[1])
+        const items: React.ReactNode[] = []
+        let currentIndex = i
+
+        while (currentIndex < lines.length) {
+          const currentLine = lines[currentIndex]
+          const match = currentLine.match(/^(\d+)\\?\.\s+(.*)$/)
+          if (!match) break
+
+          items.push(
+            <li key={`${currentIndex}-li`} dangerouslySetInnerHTML={{ __html: formatInline(match[2]) }} />,
+          )
+          currentIndex++
+        }
+
+        parts.push(
+          <ol key={`${i}-ol`} start={startNumber} className="list-decimal pl-5 space-y-2 text-muted-foreground mb-4">
+            {items}
+          </ol>,
+        )
+        i = currentIndex
         continue
       }
 
