@@ -9,10 +9,35 @@ const _inter = Inter({ subsets: ["latin"] })
 const _jetbrainsMono = JetBrains_Mono({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Fardan Nozami Ajitama - Backend Developer",
+  title: {
+    default: "Fardan Nozami Ajitama - Backend Developer",
+    template: "%s | Fardan Nozami Ajitama",
+  },
   description:
     "Backend Developer with 3+ years experience specializing in Laravel, Golang, Node.js, PostgreSQL, and MySQL",
-    generator: 'v0.app'
+  generator: "v0.app",
+  icons: {
+    icon: "/ajitama.png",
+    shortcut: "/ajitama.png",
+    apple: "/ajitama.png",
+  },
+  openGraph: {
+    title: "Fardan Nozami Ajitama - Backend Developer",
+    description:
+      "Backend Developer with 3+ years experience specializing in Laravel, Golang, Node.js, PostgreSQL, and MySQL",
+    url: "/",
+    siteName: "Fardan Nozami Ajitama",
+    locale: "id_ID",
+    type: "website",
+    images: [
+      {
+        url: "/ajitama.png",
+        width: 512,
+        height: 512,
+        alt: "Fardan Nozami Ajitama portrait",
+      },
+    ],
+  },
 }
 
 export default function RootLayout({

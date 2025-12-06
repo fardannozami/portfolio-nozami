@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import Link from "next/link"
 import { Navigation } from "@/components/navigation"
 import { Footer } from "@/components/footer"
@@ -12,10 +13,29 @@ interface BlogPageProps {
   }
 }
 
-export const metadata = {
-  title: "Blog - Fardan Nozami Ajitama",
+export const metadata: Metadata = {
+  title: "Blog",
   description:
     "Technical articles about backend development, Laravel, Golang, Node.js, and database optimization.",
+  alternates: {
+    canonical: "/blog",
+  },
+  openGraph: {
+    title: "Blog - ajitama.dev",
+    description:
+      "Technical articles about backend development, Laravel, Golang, Node.js, and database optimization.",
+    url: "/blog",
+    siteName: "ajitama.dev",
+    type: "website",
+    images: [
+      {
+        url: "/ajitama.png",
+        width: 1200,
+        height: 630,
+        alt: "Fardan Nozami Ajitama",
+      },
+    ],
+  },
 }
 
 export default async function BlogPage({ searchParams }: BlogPageProps) {

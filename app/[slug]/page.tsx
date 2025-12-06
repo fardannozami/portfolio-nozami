@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound, redirect } from "next/navigation"
 import { Navigation } from "@/components/navigation"
@@ -5,7 +6,6 @@ import { Footer } from "@/components/footer"
 import { MarkdownRenderer } from "@/components/markdown-renderer"
 import { Badge } from "@/components/ui/badge"
 import { Calendar, Clock, ArrowLeft } from "lucide-react"
-import { getBlogPost, getAllBlogPosts } from "@/lib/blog-data"
 import { getAllBlogPostsFromBlob, getBlogPostFromBlob } from "@/lib/blog"
 
 type BlogPostParams = { slug: string }
@@ -15,6 +15,8 @@ interface BlogPostPageProps {
 }
 
 export const revalidate = 3600
+
+const defaultOgImage = "/ajitama.png"
 
 async function resolveParams(params: BlogPostPageProps["params"]): Promise<BlogPostParams> {
   if (typeof (params as Promise<BlogPostParams>).then === "function") {
@@ -28,17 +30,56 @@ export async function generateStaticParams() {
   return posts.map((post) => ({ slug: post.slug }))
 }
 
-export async function generateMetadata({ params }: BlogPostPageProps) {
+export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
   const { slug } = await resolveParams(params)
-  const post = await getBlogPostFromBlob(slug)
+  const normalizedSlug = slug?.startsWith("blog/") ? slug.replace(/^blog\//, "") : slug
+  const post = await getBlogPostFromBlob(normalizedSlug)
 
   if (!post) {
-    return { title: "Post Not Found" }
+    return {
+      title: "Post Not Found",
+      description: "Artikel yang kamu cari tidak ditemukan.",
+      openGraph: {
+        title: "Post Not Found",
+        description: "Artikel yang kamu cari tidak ditemukan.",
+        url: "/blog",
+        siteName: "Fardan Nozami Ajitama",
+        images: [
+          {
+            url: defaultOgImage,
+            width: 1200,
+            height: 630,
+            alt: "Fardan Nozami Ajitama",
+          },
+        ],
+      },
+    }
   }
 
   return {
-    title: `${post.title} - Fardan Nozami Ajitama`,
+    title: post.title,
     description: post.excerpt,
+    alternates: {
+      canonical: `/${normalizedSlug}`,
+    },
+    openGraph: {
+      title: `${post.title} - ajitama.dev`,
+      description: post.excerpt,
+      url: `/${normalizedSlug}`,
+      type: "article",
+      siteName: "Fardan Nozami Ajitama",
+      publishedTime: post.date,
+      authors: ["Fardan Nozami Ajitama"],
+      tags: post.tags,
+      images: [
+        {
+          url: post.image ?? defaultOgImage,
+          width: 1200,
+          height: 630,
+          alt: post.title,
+        },
+      ],
+    },
   }
 }
 
@@ -51,7 +92,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     redirect(`/${cleanSlug}`)
   }
 
-  const post = await getBlogPost(slug)
+  const post = await getBlogPostFromBlob(slug)
 
   if (!post) {
     notFound()
