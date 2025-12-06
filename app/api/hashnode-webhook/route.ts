@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
-import { savePostsToLocal } from "@/lib/storage"
 import { BlogPost, getAllBlogPosts } from "@/lib/blog-data"
+import { savePostsToBlob } from "@/lib/storage"
 
 export async function POST(req: Request) {
   try {
@@ -15,7 +15,7 @@ export async function POST(req: Request) {
     const rawPosts = await getAllBlogPosts()
 
     // Simpan versi CLEAN ke local file
-    await savePostsToLocal(rawPosts)
+    await savePostsToBlob(rawPosts)
 
     console.log("✅ Posts updated locally")
 
