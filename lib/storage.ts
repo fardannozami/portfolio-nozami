@@ -6,6 +6,7 @@ export async function savePostsToBlob(posts: any) {
   const { url } = await put("posts.json", Buffer.from(json), {
     contentType: "application/json",
     access: "public", // atau "private"
+    allowOverwrite: true,
   })
 
   return url // link permanen
