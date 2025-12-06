@@ -14,10 +14,14 @@ const HASHNODE_HOST = process.env.HASHNODE_HOST
 
 // Query list posts
 const HASHNODE_POSTS_QUERY = (nonce: string) => `
-  query PublicationPosts($host: String!) {
+  query PublicationPosts($host: String!, $after: String) {
     _cacheBuster_${nonce}: __typename
     publication(host: $host) {
-      posts(first: 10) {
+      posts(first: 100, after: $after) {
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
         edges {
           node {
             slug
@@ -25,21 +29,15 @@ const HASHNODE_POSTS_QUERY = (nonce: string) => `
             brief
             publishedAt
             readTimeInMinutes
-            tags {
-              name
-            }
-            coverImage {
-              url
-            }
-            content {
-              markdown
-            }
+            tags { name }
+            coverImage { url }
+            content { markdown }
           }
         }
       }
     }
   }
-`
+`;
 
 // Query single post
 const HASHNODE_POST_QUERY = (nonce: string) => `
