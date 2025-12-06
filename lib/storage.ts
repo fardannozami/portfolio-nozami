@@ -1,29 +1,26 @@
-import { writeFile, mkdir, readFile } from "fs/promises"
-import path from "path"
+import { put } from "@vercel/blob"
 
-const POSTS_PATH = path.join("/tmp", "posts.json")
+export async function savePostsToBlob(posts: any) {
+  const json = JSON.stringify(posts, null, 2)
 
-export async function savePostsToLocal(posts: any) {
-  try {
-    const dir = path.dirname(POSTS_PATH)
+  const { url } = await put("posts.json", Buffer.from(json), {
+    contentType: "application/json",
+    access: "public", // atau "private"
+  })
 
-    // Create folder kalau belum ada
-    await mkdir(dir, { recursive: true })
-
-    await writeFile(POSTS_PATH, JSON.stringify(posts, null, 2), "utf8")
-
-    return POSTS_PATH
-  } catch (error) {
-    console.error("❌ Failed to save file:", error)
-    throw error
-  }
+  return url // link permanen
 }
 
-export async function loadLocalPosts() {
+export async function loadPostsFromBlob() {
   try {
-    const raw = await readFile(POSTS_PATH, "utf8")
-    return JSON.parse(raw)
-  } catch {
+    const res = await fetch(process.env.BLOB_BASE_URL + "/posts.json")
+
+    if (!res.ok) {
+      return []
+    }
+
+    return await res.json()
+  } catch (err) {
     return []
   }
 }
