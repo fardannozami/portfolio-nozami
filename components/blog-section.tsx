@@ -2,10 +2,10 @@ import Link from "next/link"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { ArrowRight, Calendar, Clock } from "lucide-react"
-import { getAllBlogPosts } from "@/lib/blog-data"
+import { getAllBlogPostsFromBlob } from "@/lib/blog"
 
 export async function BlogSection() {
-  const posts = (await getAllBlogPosts()).slice(0, 3)
+  const posts = (await getAllBlogPostsFromBlob()).slice(0, 3)
 
   return (
     <section className="py-20" id="blog">
@@ -50,7 +50,7 @@ export async function BlogSection() {
                     <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:text-primary transition-colors line-clamp-2">
                       {post.title}
                     </h3>
-                    <p className="text-muted-foreground text-sm mb-4 flex-grow line-clamp-3">{post.excerpt}</p>
+                    <p className="text-muted-foreground text-sm mb-4 grow line-clamp-3">{post.excerpt}</p>
                     <div className="flex items-center gap-4 text-xs text-muted-foreground">
                       <span className="flex items-center gap-1">
                         <Calendar className="h-3.5 w-3.5" />

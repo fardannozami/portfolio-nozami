@@ -4,7 +4,7 @@ import { Footer } from "@/components/footer"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Calendar, Clock, ArrowLeft } from "lucide-react"
-import { getAllBlogPosts } from "@/lib/blog"
+import { getAllBlogPostsFromBlob } from "@/lib/blog"
 
 interface BlogPageProps {
   searchParams?: {
@@ -32,7 +32,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   /** ---------------------------
    * PAGINATION
    * --------------------------- */
-  const posts = await getAllBlogPosts()
+  const posts = await getAllBlogPostsFromBlob()
   const pageSize = 10
 
   const totalPages = Math.max(1, Math.ceil(posts.length / pageSize))

@@ -6,6 +6,7 @@ import { MarkdownRenderer } from "@/components/markdown-renderer"
 import { Badge } from "@/components/ui/badge"
 import { Calendar, Clock, ArrowLeft } from "lucide-react"
 import { getBlogPost, getAllBlogPosts } from "@/lib/blog-data"
+import { getAllBlogPostsFromBlob, getBlogPostFromBlob } from "@/lib/blog"
 
 type BlogPostParams = { slug: string }
 
@@ -23,13 +24,13 @@ async function resolveParams(params: BlogPostPageProps["params"]): Promise<BlogP
 }
 
 export async function generateStaticParams() {
-  const posts = await getAllBlogPosts()
+  const posts = await getAllBlogPostsFromBlob()
   return posts.map((post) => ({ slug: post.slug }))
 }
 
 export async function generateMetadata({ params }: BlogPostPageProps) {
   const { slug } = await resolveParams(params)
-  const post = await getBlogPost(slug)
+  const post = await getBlogPostFromBlob(slug)
 
   if (!post) {
     return { title: "Post Not Found" }
