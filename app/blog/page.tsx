@@ -6,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Calendar, Clock, ArrowLeft } from "lucide-react"
 import { getAllBlogPostsFromBlob } from "@/lib/blog"
+import { formatDate } from "@/lib/date"
 
 interface BlogPageProps {
   searchParams?: {
@@ -138,7 +139,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                       <div className="flex items-center gap-4 text-sm text-muted-foreground">
                         <span className="flex items-center gap-1.5">
                           <Calendar className="h-4 w-4" />
-                          {new Date(post.date).toLocaleDateString("id-ID", {
+                          {formatDate(post.date, {
                             day: "numeric",
                             month: "long",
                             year: "numeric",

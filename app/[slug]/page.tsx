@@ -7,6 +7,7 @@ import { MarkdownRenderer } from "@/components/markdown-renderer"
 import { Badge } from "@/components/ui/badge"
 import { Calendar, Clock, ArrowLeft } from "lucide-react"
 import { getAllBlogPostsFromBlob, getBlogPostFromBlob } from "@/lib/blog"
+import { formatDate } from "@/lib/date"
 
 type BlogPostParams = { slug: string }
 
@@ -126,7 +127,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             <div className="flex items-center gap-6 text-sm text-muted-foreground pb-8 border-b border-border">
               <span className="flex items-center gap-2">
                 <Calendar className="h-4 w-4" />
-                {new Date(post.date).toLocaleDateString("id-ID", {
+                {formatDate(post.date, {
                   day: "numeric",
                   month: "long",
                   year: "numeric",

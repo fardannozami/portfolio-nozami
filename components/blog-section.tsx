@@ -3,6 +3,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { ArrowRight, Calendar, Clock } from "lucide-react"
 import { getAllBlogPostsFromBlob } from "@/lib/blog"
+import { formatDate } from "@/lib/date"
 
 export async function BlogSection() {
   const posts = (await getAllBlogPostsFromBlob()).slice(0, 3)
@@ -54,11 +55,7 @@ export async function BlogSection() {
                     <div className="flex items-center gap-4 text-xs text-muted-foreground">
                       <span className="flex items-center gap-1">
                         <Calendar className="h-3.5 w-3.5" />
-                        {new Date(post.date).toLocaleDateString("id-ID", {
-                          day: "numeric",
-                          month: "short",
-                          year: "numeric",
-                        })}
+                        {formatDate(post.date)}
                       </span>
                       <span className="flex items-center gap-1">
                         <Clock className="h-3.5 w-3.5" />
