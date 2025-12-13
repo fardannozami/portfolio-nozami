@@ -1,16 +1,15 @@
+import { Footer } from "@/components/footer"
+import { MarkdownRenderer } from "@/components/markdown-renderer"
+import { Navigation } from "@/components/navigation"
+import { Badge } from "@/components/ui/badge"
+import { Card, CardContent } from "@/components/ui/card"
+import { getAllBlogPostsFromBlob, getBlogPostFromBlob } from "@/lib/blog"
+import type { BlogPost } from "@/lib/blog-data"
+import { formatDate } from "@/lib/date"
+import { ArrowLeft, Calendar, Clock } from "lucide-react"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound, redirect } from "next/navigation"
-import { Navigation } from "@/components/navigation"
-import { Footer } from "@/components/footer"
-import { MarkdownRenderer } from "@/components/markdown-renderer"
-import { Badge } from "@/components/ui/badge"
-import { Card, CardContent } from "@/components/ui/card"
-import { Calendar, Clock, ArrowLeft } from "lucide-react"
-import type { BlogPost } from "@/lib/blog-data"
-import { getAllBlogPostsFromBlob, getBlogPostFromBlob } from "@/lib/blog"
-import { formatDate } from "@/lib/date"
-import { NewsletterCTA } from "@/components/newsletter-cta"
 
 type BlogPostParams = { slug: string }
 
@@ -167,10 +166,6 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           </div>
 
           <div className="mt-12">
-            <NewsletterCTA />
-          </div>
-
-          <div className="mt-12">
             {hasSeries ? (
               <SeriesSection
                 seriesName={post.series?.name ?? "Article Series"}
@@ -189,14 +184,15 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 }
 
 function getSeriesPosts(current: BlogPost, otherPosts: BlogPost[]): BlogPost[] {
-  if (!current.series) return []
+  const currentSeries = current.series
+  if (!currentSeries) return []
 
   const sameSeries = otherPosts.filter((post) => {
     if (!post.series) return false
-    if (current.series.slug && post.series.slug) {
-      return post.series.slug === current.series.slug
+    if (currentSeries.slug && post.series.slug) {
+      return post.series.slug === currentSeries.slug
     }
-    return post.series.name === current.series.name
+    return post.series.name === currentSeries.name
   })
 
   const uniquePosts = [...sameSeries, current].filter(
@@ -214,7 +210,7 @@ function pickRandomPosts(posts: BlogPost[], count: number): BlogPost[] {
   const copy = [...posts]
   for (let i = copy.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1))
-    ;[copy[i], copy[j]] = [copy[j], copy[i]]
+      ;[copy[i], copy[j]] = [copy[j], copy[i]]
   }
   return copy.slice(0, count)
 }
@@ -251,9 +247,8 @@ function SeriesSection({
               <div className="space-y-1">
                 <Link
                   href={`/${item.slug}`}
-                  className={`text-base font-semibold transition-colors ${
-                    isActive ? "text-primary" : "text-foreground hover:text-primary"
-                  }`}
+                  className={`text-base font-semibold transition-colors ${isActive ? "text-primary" : "text-foreground hover:text-primary"
+                    }`}
                 >
                   {item.title}
                 </Link>
