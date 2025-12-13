@@ -1,32 +1,53 @@
-import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { Card, CardContent } from "@/components/ui/card"
 
 const experiences = [
   {
-    title: "Senior Backend Developer",
-    company: "Tech Company",
-    period: "2023 — Present",
+    title: "Software Engineer (Backend)",
+    company: "PT Digdaya Inovasi Gemilang",
+    period: "September 2023 — Present (Remote)",
     description:
-      "Leading backend development for enterprise-level applications. Designing and implementing scalable microservices architecture using Golang and PostgreSQL.",
-    technologies: ["Golang", "PostgreSQL", "Docker", "Kubernetes", "gRPC"],
+      "Played a key role in developing and maintaining high-performance backend systems for production-grade web applications. Designed and built scalable services using Golang and PostgreSQL, optimized database performance, and ensured reliable deployments using Docker on AWS EC2. Implemented CI/CD pipelines with GitHub Actions to automate testing and deployment, improving delivery speed and system reliability.",
+    technologies: [
+      "Golang",
+      "PostgreSQL",
+      "Docker",
+      "AWS EC2",
+      "GitHub Actions",
+      "CI/CD",
+    ],
   },
   {
     title: "Backend Developer",
-    company: "Startup Inc",
-    period: "2021 — 2023",
+    company: "PT Inosoft",
+    period: "August 2022 — August 2023 (Remote)",
     description:
-      "Built and maintained RESTful APIs using Laravel and Node.js. Optimized database queries resulting in 40% performance improvement.",
-    technologies: ["Laravel", "Node.js", "MySQL", "Redis", "AWS"],
+      "Developed and maintained backend services using Laravel and MySQL. Responsible for designing and optimizing database schemas, building secure and scalable RESTful APIs, and integrating third-party services. Actively handled bug fixes, feature enhancements, and performance improvements while maintaining clean and well-versioned code using Git.",
+    technologies: [
+      "Laravel",
+      "MySQL",
+      "REST API",
+      "Git",
+      "Backend Architecture",
+    ],
   },
   {
-    title: "Junior Backend Developer",
-    company: "Digital Agency",
-    period: "2020 — 2021",
+    title: "Node.js Developer",
+    company: "PT Sambung Digital Indonesia",
+    period: "January 2022 — December 2022 (Remote)",
     description:
-      "Developed backend systems for various client projects. Collaborated with frontend teams to integrate APIs and ensure smooth user experiences.",
-    technologies: ["PHP", "Laravel", "MySQL", "Git", "REST API"],
+      "Worked as a Node.js Developer focusing on backend application development using Express.js and PostgreSQL. Built REST APIs, handled server-side rendering with EJS, and managed application deployments on AWS EC2. Provided technical support during product rollout and assisted the team in debugging and resolving production issues.",
+    technologies: [
+      "Node.js",
+      "Express.js",
+      "PostgreSQL",
+      "EJS",
+      "AWS EC2",
+      "REST API",
+    ],
   },
 ]
+
 
 export function ExperienceSection() {
   return (

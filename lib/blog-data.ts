@@ -7,13 +7,27 @@ export interface BlogPost {
   readTime: string
   tags: string[]
   image?: string
+  series?: {
+    name: string
+    slug?: string
+  }
 }
 
 const HASHNODE_ENDPOINT = "https://gql.hashnode.com/"
 const HASHNODE_HOST = process.env.HASHNODE_HOST
 
+const seriesFragment = (includeSeries: boolean) =>
+  includeSeries
+    ? `
+            series {
+              name
+              slug
+            }
+    `
+    : ""
+
 // Query list posts
-const HASHNODE_POSTS_QUERY = (nonce: string) => `
+const HASHNODE_POSTS_QUERY = (nonce: string, includeSeries: boolean) => `
   query PublicationPosts($host: String!, $after: String) {
     _cacheBuster_${nonce}: __typename
     publication(host: $host) {
@@ -32,6 +46,7 @@ const HASHNODE_POSTS_QUERY = (nonce: string) => `
             tags { name }
             coverImage { url }
             content { markdown }
+            ${seriesFragment(includeSeries)}
           }
         }
       }
@@ -40,7 +55,7 @@ const HASHNODE_POSTS_QUERY = (nonce: string) => `
 `;
 
 // Query single post
-const HASHNODE_POST_QUERY = (nonce: string) => `
+const HASHNODE_POST_QUERY = (nonce: string, includeSeries: boolean) => `
   query PublicationPost($host: String!, $slug: String!) {
     _cacheBuster_${nonce}: __typename
     publication(host: $host) {
@@ -59,6 +74,7 @@ const HASHNODE_POST_QUERY = (nonce: string) => `
         content {
           markdown
         }
+        ${seriesFragment(includeSeries)}
       }
     }
   }
@@ -75,6 +91,7 @@ type HashnodePost = {
   tags?: { name?: string | null }[] | null
   coverImage?: { url?: string | null } | null
   content?: { markdown?: string | null } | null
+  series?: { name?: string | null; slug?: string | null } | null
 }
 
 type HashnodePostsResponse = {
@@ -137,14 +154,30 @@ function mapHashnodePost(node: HashnodePost | null | undefined): BlogPost | null
       : "5 min read",
     tags: (node.tags ?? []).map((tag) => tag?.name).filter(Boolean) as string[],
     image: node.coverImage?.url ?? undefined,
+    series: node.series?.name
+      ? {
+          name: node.series.name,
+          slug: node.series.slug ?? undefined,
+        }
+      : undefined,
   }
+}
+
+async function fetchWithSeriesFallback<T>(
+  queryBuilder: (nonce: string, includeSeries: boolean) => string,
+  variables: Record<string, unknown>
+): Promise<T | null> {
+  const nonce = Date.now().toString()
+
+  const withSeries = await requestHashnode<T>(queryBuilder(nonce, true), variables)
+  if (withSeries) return withSeries
+
+  return await requestHashnode<T>(queryBuilder(nonce, false), variables)
 }
 
 // Fetch ALL posts (fresh always)
 export async function getAllBlogPosts(): Promise<BlogPost[]> {
-  const query = HASHNODE_POSTS_QUERY(Date.now().toString())
-
-  const data = await requestHashnode<HashnodePostsResponse>(query, {
+  const data = await fetchWithSeriesFallback<HashnodePostsResponse>(HASHNODE_POSTS_QUERY, {
     host: HASHNODE_HOST,
   })
 
@@ -160,9 +193,7 @@ export async function getAllBlogPosts(): Promise<BlogPost[]> {
 
 // Fetch SINGLE POST (fresh always)
 export async function getBlogPost(slug: string): Promise<BlogPost | undefined> {
-  const query = HASHNODE_POST_QUERY(Date.now().toString())
-
-  const data = await requestHashnode<HashnodePostResponse>(query, {
+  const data = await fetchWithSeriesFallback<HashnodePostResponse>(HASHNODE_POST_QUERY, {
     host: HASHNODE_HOST,
     slug,
   })
