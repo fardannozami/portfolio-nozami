@@ -123,6 +123,18 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
         continue
       }
 
+      // Horizontal Rule
+      if (/^---+$/.test(line.trim())) {
+        parts.push(
+          <hr
+            key={i}
+            className="my-6 border-border"
+          />
+        )
+        i++
+        continue
+      }
+
       // Regular paragraph
       if (line.trim()) {
         parts.push(
