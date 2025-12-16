@@ -27,6 +27,9 @@ function highlightCode(code: string, language: string): string {
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
 
+  // Use placeholders so later replacements don't touch already injected HTML
+  const placeholders: { token: string; value: string }[] = []
+
   // Keywords based on language
   const keywords: Record<string, string[]> = {
     php: [
@@ -145,14 +148,19 @@ function highlightCode(code: string, language: string): string {
 
   const langKeywords = keywords[language] || []
 
-  // Highlight strings
-  highlighted = highlighted.replace(/(["'`])(?:(?=(\\?))\2.)*?\1/g, '<span class="text-green-400">$&</span>')
+  // Capture comments first so we don't highlight inside them
+  highlighted = highlighted.replace(/(\/\/.*$|\/\*[\s\S]*?\*\/|#.*$|--.*$)/gm, (match) => {
+    const token = `__COMMENT_${placeholders.length}__`
+    placeholders.push({ token, value: `<span class="text-muted-foreground">${match}</span>` })
+    return token
+  })
 
-  // Highlight comments
-  highlighted = highlighted.replace(
-    /(\/\/.*$|\/\*[\s\S]*?\*\/|#.*$|--.*$)/gm,
-    '<span class="text-muted-foreground">$&</span>',
-  )
+  // Capture strings separately to keep other rules out of them
+  highlighted = highlighted.replace(/(["'`])(?:(?=(\\?))\2.)*?\1/g, (match) => {
+    const token = `__STRING_${placeholders.length}__`
+    placeholders.push({ token, value: `<span class="text-green-400">${match}</span>` })
+    return token
+  })
 
   // Highlight keywords
   langKeywords.forEach((keyword) => {
@@ -165,6 +173,11 @@ function highlightCode(code: string, language: string): string {
 
   // Highlight function calls
   highlighted = highlighted.replace(/\b([a-zA-Z_][a-zA-Z0-9_]*)\s*\(/g, '<span class="text-yellow-300">$1</span>(')
+
+  // Restore captured segments
+  placeholders.forEach(({ token, value }) => {
+    highlighted = highlighted.replace(token, value)
+  })
 
   return highlighted
 }
