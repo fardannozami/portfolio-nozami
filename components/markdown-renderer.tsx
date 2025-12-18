@@ -6,6 +6,22 @@ interface MarkdownRendererProps {
   content: string
 }
 
+function isTableRow(line: string) {
+  return /^\s*\|(.+)\|\s*$/.test(line.trim())
+}
+
+function isTableSeparator(line: string) {
+  return /^\s*\|(?:\s*:?-+:?\s*\|)+\s*$/.test(line.trim())
+}
+
+function parseTableCells(line: string) {
+  return line
+    .trim()
+    .replace(/^\||\|$/g, "")
+    .split("|")
+    .map((cell) => cell.trim())
+}
+
 function formatInline(text: string) {
   // Preserve inline code before applying other formatting
   const placeholders: string[] = []
@@ -82,6 +98,66 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
         )
         i = currentIndex
         continue
+      }
+
+      // Table
+      if (isTableRow(line)) {
+        const headerLine = line
+        let currentIndex = i + 1
+
+        // Skip blank lines to find the separator row
+        while (currentIndex < lines.length && !lines[currentIndex].trim()) currentIndex++
+
+        if (currentIndex < lines.length && isTableSeparator(lines[currentIndex])) {
+          const headerCells = parseTableCells(headerLine)
+          const rows: React.ReactNode[] = []
+          currentIndex++
+
+          while (currentIndex < lines.length) {
+            const rowLine = lines[currentIndex]
+            if (!rowLine.trim()) {
+              currentIndex++
+              continue
+            }
+
+            if (!isTableRow(rowLine)) break
+
+            const cells = parseTableCells(rowLine)
+            rows.push(
+              <tr key={`${currentIndex}-tr`} className="border-b border-border last:border-0">
+                {cells.map((cell, cellIndex) => (
+                  <td
+                    key={`${currentIndex}-td-${cellIndex}`}
+                    className="py-2 pl-2 pr-4 align-top border-r border-border last:border-r-0"
+                    dangerouslySetInnerHTML={{ __html: formatInline(cell) }}
+                  />
+                ))}
+              </tr>,
+            )
+            currentIndex++
+          }
+
+          parts.push(
+            <div key={`${i}-table`} className="overflow-x-auto mb-6">
+              <table className="min-w-full text-sm text-muted-foreground border-collapse border border-border">
+                <thead>
+                  <tr className="border-b border-border">
+                    {headerCells.map((cell, cellIndex) => (
+                      <th
+                        key={`${i}-th-${cellIndex}`}
+                        className="text-left font-semibold py-2 pl-2 pr-4 border-r border-border last:border-r-0"
+                        dangerouslySetInnerHTML={{ __html: formatInline(cell) }}
+                      />
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>{rows}</tbody>
+              </table>
+            </div>,
+          )
+          i = currentIndex
+          continue
+        }
       }
 
       // Heading 1
