@@ -29,6 +29,11 @@ function highlightCode(code: string, language: string): string {
 
   // Use placeholders so later replacements don't touch already injected HTML
   const placeholders: { token: string; value: string }[] = []
+  const addPlaceholder = (value: string) => {
+    const token = `@@PLACEHOLDER_${placeholders.length}@@`
+    placeholders.push({ token, value })
+    return token
+  }
 
   // Keywords based on language
   const keywords: Record<string, string[]> = {
@@ -149,31 +154,33 @@ function highlightCode(code: string, language: string): string {
   const langKeywords = keywords[language] || []
 
   // Capture comments first so we don't highlight inside them
-  highlighted = highlighted.replace(/(\/\/.*$|\/\*[\s\S]*?\*\/|#.*$|--.*$)/gm, (match) => {
-    const token = `__COMMENT_${placeholders.length}__`
-    placeholders.push({ token, value: `<span class="text-muted-foreground">${match}</span>` })
-    return token
-  })
+  highlighted = highlighted.replace(/(\/\/.*$|\/\*[\s\S]*?\*\/|#.*$|--.*$)/gm, (match) =>
+    addPlaceholder(`<span class="text-slate-400">${match}</span>`),
+  )
 
   // Capture strings separately to keep other rules out of them
-  highlighted = highlighted.replace(/(["'`])(?:(?=(\\?))\2.)*?\1/g, (match) => {
-    const token = `__STRING_${placeholders.length}__`
-    placeholders.push({ token, value: `<span class="text-green-400">${match}</span>` })
-    return token
-  })
+  highlighted = highlighted.replace(/(["'`])(?:(?=(\\?))\2.)*?\1/g, (match) =>
+    addPlaceholder(`<span class="text-green-400">${match}</span>`),
+  )
 
   // Highlight keywords
   if (langKeywords.length) {
     const keywordPattern = langKeywords.map((keyword) => keyword.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|")
     const regex = new RegExp(`\\b(${keywordPattern})\\b`, "gi")
-    highlighted = highlighted.replace(regex, '<span class="text-primary font-medium">$1</span>')
+    highlighted = highlighted.replace(regex, (match) =>
+      addPlaceholder(`<span class="text-sky-300 font-semibold">${match}</span>`),
+    )
   }
 
   // Highlight numbers
-  highlighted = highlighted.replace(/\b(\d+)\b/g, '<span class="text-orange-400">$1</span>')
+  highlighted = highlighted.replace(/\b(\d+)\b/g, (match) =>
+    addPlaceholder(`<span class="text-orange-400">${match}</span>`),
+  )
 
   // Highlight function calls
-  highlighted = highlighted.replace(/\b([a-zA-Z_][a-zA-Z0-9_]*)\s*\(/g, '<span class="text-yellow-300">$1</span>(')
+  highlighted = highlighted.replace(/\b([a-zA-Z_][a-zA-Z0-9_]*)\s*\(/g, (_match, func) =>
+    addPlaceholder(`<span class="text-yellow-300">${func}</span>(`),
+  )
 
   // Restore captured segments
   placeholders.forEach(({ token, value }) => {
@@ -195,14 +202,14 @@ export function CodeBlock({ code, language }: CodeBlockProps) {
   const highlighted = highlightCode(code, language)
 
   return (
-    <div className="relative group my-4 rounded-lg overflow-hidden border border-border bg-secondary/50">
-      <div className="flex items-center justify-between px-4 py-2 bg-secondary border-b border-border">
-        <span className={`text-xs font-mono ${languageColors[language] || "text-muted-foreground"}`}>{language}</span>
+    <div className="relative group my-4 rounded-lg overflow-hidden border border-slate-800 bg-[#0c1220] text-slate-100">
+      <div className="flex items-center justify-between px-4 py-2 bg-[#0f172a] border-b border-slate-800">
+        <span className={`text-xs font-mono ${languageColors[language] || "text-slate-300"}`}>{language}</span>
         <Button
           variant="ghost"
           size="sm"
           onClick={copyToClipboard}
-          className="h-7 px-2 text-xs gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity"
+          className="h-7 px-2 text-xs gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity text-slate-100 hover:bg-white/10"
         >
           {copied ? (
             <>
@@ -217,8 +224,8 @@ export function CodeBlock({ code, language }: CodeBlockProps) {
           )}
         </Button>
       </div>
-      <pre className="p-4 overflow-x-auto text-sm">
-        <code className="font-mono text-foreground" dangerouslySetInnerHTML={{ __html: highlighted }} />
+      <pre className="p-4 overflow-x-auto text-sm bg-transparent text-slate-100">
+        <code className="font-mono text-slate-100" dangerouslySetInnerHTML={{ __html: highlighted }} />
       </pre>
     </div>
   )
