@@ -163,10 +163,11 @@ function highlightCode(code: string, language: string): string {
   })
 
   // Highlight keywords
-  langKeywords.forEach((keyword) => {
-    const regex = new RegExp(`\\b(${keyword})\\b`, "gi")
+  if (langKeywords.length) {
+    const keywordPattern = langKeywords.map((keyword) => keyword.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|")
+    const regex = new RegExp(`\\b(${keywordPattern})\\b`, "gi")
     highlighted = highlighted.replace(regex, '<span class="text-primary font-medium">$1</span>')
-  })
+  }
 
   // Highlight numbers
   highlighted = highlighted.replace(/\b(\d+)\b/g, '<span class="text-orange-400">$1</span>')
