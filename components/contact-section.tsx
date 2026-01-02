@@ -8,10 +8,10 @@ export function ContactSection() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-2xl mx-auto text-center">
           <p className="text-primary font-mono text-sm mb-2">Get In Touch</p>
-          <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-6">Let's Work Together</h2>
+          <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-6">Let&apos;s Work Together</h2>
           <p className="text-muted-foreground text-lg mb-8 leading-relaxed">
-            I'm currently open to new opportunities and interesting projects. Whether you have a question or just want
-            to say hi, feel free to reach out!
+            I&apos;m currently open to new opportunities and interesting projects. Whether you have a question or just
+            want to say hi, feel free to reach out!
           </p>
           <Card className="bg-card border-border mb-8">
             <CardContent className="p-6">

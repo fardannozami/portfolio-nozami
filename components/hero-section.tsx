@@ -13,9 +13,9 @@ export function HeroSection() {
             </h1>
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-muted-foreground mb-6">Backend Developer</h2>
             <p className="text-muted-foreground text-lg leading-relaxed mb-8 max-w-xl text-pretty">
-              I'm a passionate backend developer with <span className="text-primary font-semibold">3+ years</span> of
-              experience building scalable, efficient, and secure server-side applications. I specialize in crafting
-              robust APIs and database architectures that power modern web applications.
+              I&apos;m a passionate backend developer with <span className="text-primary font-semibold">3+ years</span>{" "}
+              of experience building scalable, efficient, and secure server-side applications. I specialize in
+              crafting robust APIs and database architectures that power modern web applications.
             </p>
             <div className="flex flex-wrap gap-4 mb-8">
               <Button asChild size="lg" className="rounded-full">

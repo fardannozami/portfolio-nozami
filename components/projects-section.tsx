@@ -35,64 +35,64 @@ const projects: Project[] = [
     live: "https://member.jemputjodohmu.com",
     github: null,
   },
-  {
-    title: "Ship Management System",
-    description:
-      "Sistem manajemen kapal berbasis SPA & PWA untuk mengelola operasional kapal, user role kompleks, dan workflow perusahaan pelayaran.",
-    technologies: [
-      "Laravel 12",
-      "Inertia",
-      "Vue.js",
-      "SPA",
-      "PWA",
-      "PostgreSQL",
-    ],
-    live: "https://pms.ajitama.dev",
-    github: null,
-    demo: {
-      superAdmin: {
-        email: "admin@admin.com",
-        password: "password",
-      },
-      companyAdmin: {
-        email: "admincompany@admin.com",
-        password: "password",
-      },
-      master: {
-        email: "master@papandayan.com",
-        password: "password",
-      },
-      chiefEngineer: {
-        email: "ce@papandayan.com",
-        password: "password",
-      },
-      superintendent: {
-        email: "super@intendent.com",
-        password: "password",
-      },
-    },
-  },
-  {
-    title: "Malinau Satu Inovasi",
-    description:
-      "Portal inovasi daerah dengan sistem admin modern untuk mengelola konten, galeri, dan data inovasi menggunakan admin panel Filament.",
-    technologies: [
-      "Laravel 12",
-      "Inertia",
-      "Vue.js",
-      "SPA",
-      "MySQL",
-      "Filament v4",
-    ],
-    live: "https://masi.ajitama.dev",
-    github: null,
-    demo: {
-      admin: {
-        email: "admin@admin.com",
-        password: "password",
-      },
-    },
-  },
+  // {
+  //   title: "Ship Management System",
+  //   description:
+  //     "Sistem manajemen kapal berbasis SPA & PWA untuk mengelola operasional kapal, user role kompleks, dan workflow perusahaan pelayaran.",
+  //   technologies: [
+  //     "Laravel 12",
+  //     "Inertia",
+  //     "Vue.js",
+  //     "SPA",
+  //     "PWA",
+  //     "PostgreSQL",
+  //   ],
+  //   live: "https://pms.ajitama.dev",
+  //   github: null,
+  //   demo: {
+  //     superAdmin: {
+  //       email: "admin@admin.com",
+  //       password: "password",
+  //     },
+  //     companyAdmin: {
+  //       email: "admincompany@admin.com",
+  //       password: "password",
+  //     },
+  //     master: {
+  //       email: "master@papandayan.com",
+  //       password: "password",
+  //     },
+  //     chiefEngineer: {
+  //       email: "ce@papandayan.com",
+  //       password: "password",
+  //     },
+  //     superintendent: {
+  //       email: "super@intendent.com",
+  //       password: "password",
+  //     },
+  //   },
+  // },
+  // {
+  //   title: "Malinau Satu Inovasi",
+  //   description:
+  //     "Portal inovasi daerah dengan sistem admin modern untuk mengelola konten, galeri, dan data inovasi menggunakan admin panel Filament.",
+  //   technologies: [
+  //     "Laravel 12",
+  //     "Inertia",
+  //     "Vue.js",
+  //     "SPA",
+  //     "MySQL",
+  //     "Filament v4",
+  //   ],
+  //   live: "https://masi.ajitama.dev",
+  //   github: null,
+  //   demo: {
+  //     admin: {
+  //       email: "admin@admin.com",
+  //       password: "password",
+  //     },
+  //   },
+  // },
 ]
 
 
@@ -101,7 +101,7 @@ export function ProjectsSection() {
     <section className="py-20" id="projects">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-12">
-          <p className="text-primary font-mono text-sm mb-2">What I've Built</p>
+          <p className="text-primary font-mono text-sm mb-2">What I&apos;ve Built</p>
           <h2 className="text-3xl sm:text-4xl font-bold text-foreground">Featured Projects</h2>
         </div>
         <div className="grid md:grid-cols-2 gap-6">

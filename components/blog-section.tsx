@@ -1,3 +1,4 @@
+import Image from "next/image"
 import Link from "next/link"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -32,12 +33,14 @@ export async function BlogSection() {
                 <Card className="h-full bg-card border-border hover:border-primary/50 transition-all hover:-translate-y-1 cursor-pointer group">
                   <CardContent className="p-6 flex flex-col h-full">
                     {post.image && (
-                      <div className="mb-4 h-40 overflow-hidden rounded-lg border border-border/60 bg-muted">
-                        <img
+                      <div className="relative mb-4 h-40 overflow-hidden rounded-lg border border-border/60 bg-muted">
+                        <Image
                           src={post.image}
                           alt={post.title}
-                          loading="lazy"
-                          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                          fill
+                          sizes="(min-width: 1024px) 320px, (min-width: 768px) 50vw, 100vw"
+                          className="object-cover transition-transform duration-300 group-hover:scale-105"
+                          unoptimized
                         />
                       </div>
                     )}

@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge"
 import { getAllBlogPostsFromBlob, getBlogPostFromBlob } from "@/lib/blog"
 import { formatDate } from "@/lib/date"
 import { ArrowLeft, Calendar, Clock } from "lucide-react"
+import Image from "next/image"
 import Link from "next/link"
 import { notFound, redirect } from "next/navigation"
 
@@ -79,12 +80,14 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           </header>
 
           {post.image && (
-            <div className="mb-10 overflow-hidden rounded-xl border border-border bg-muted">
-              <img
+            <div className="relative mb-10 h-80 overflow-hidden rounded-xl border border-border bg-muted">
+              <Image
                 src={post.image}
                 alt={post.title}
-                loading="lazy"
-                className="w-full h-80 object-cover"
+                fill
+                sizes="(min-width: 1024px) 768px, 100vw"
+                className="object-cover"
+                unoptimized
               />
             </div>
           )}
