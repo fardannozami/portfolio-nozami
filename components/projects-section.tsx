@@ -35,6 +35,33 @@ const projects: Project[] = [
     live: "https://member.jemputjodohmu.com",
     github: null,
   },
+  {
+    title: "Claim Management System (Nationwide Scale)",
+    description:
+      "Sistem klaim berskala nasional untuk distribusi FMCG. Menangani volume klaim tinggi dengan state management yang aman, concurrent processing, dan arsitektur backend yang siap multi-region.",
+    technologies: ["laravel", "PostgreSQL", "REST API", "Concurrency"],
+    live: '',
+    github: null,
+  },
+
+  {
+    title: "Medical Equipment Sales & Prospect Management Platform",
+    description:
+      "Platform manajemen sales dan prospek untuk perusahaan alat kesehatan. Mendukung multi-role user dengan dashboard real-time dan analytics performa penjualan.",
+    technologies: ["laravel", "REST API", "PostgreSQL"],
+    live: "",
+    github: null,
+  },
+
+  {
+    title: "Property Sales Prospect Management System",
+    description:
+      "Sistem backend untuk manajemen prospek dan aktivitas penjualan properti dengan fokus pada performa tinggi, reporting, dan skalabilitas jangka panjang.",
+
+    technologies: ["laravel", "PostgreSQL", "REST API",],
+    live: "",
+    github: null,
+  },
   // {
   //   title: "Ship Management System",
   //   description:
