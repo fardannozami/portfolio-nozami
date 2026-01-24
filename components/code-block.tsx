@@ -209,7 +209,7 @@ export function CodeBlock({ code, language }: CodeBlockProps) {
           variant="ghost"
           size="sm"
           onClick={copyToClipboard}
-          className="h-7 px-2 text-xs gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity text-slate-100 hover:bg-white/10"
+          className="h-7 px-2 text-xs gap-1.5 opacity-80 hover:opacity-100 focus-visible:opacity-100 transition-opacity text-slate-100 hover:text-slate-100 hover:bg-white/10"
         >
           {copied ? (
             <>
