@@ -1,5 +1,5 @@
-import { Github, Linkedin, Mail } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Github, Linkedin, Mail } from "lucide-react"
 
 export function HeroSection() {
   return (
@@ -13,7 +13,7 @@ export function HeroSection() {
             </h1>
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-muted-foreground mb-6">Backend Developer</h2>
             <p className="text-muted-foreground text-lg leading-relaxed mb-8 max-w-xl text-pretty">
-              I&apos;m a passionate backend developer with <span className="text-primary font-semibold">3+ years</span>{" "}
+              I&apos;m a passionate backend developer with <span className="text-primary font-semibold">4+ years</span>{" "}
               of experience building scalable, efficient, and secure server-side applications. I specialize in
               crafting robust APIs and database architectures that power modern web applications.
             </p>
@@ -61,7 +61,7 @@ export function HeroSection() {
                 </div>
               </div>
               <div className="absolute -bottom-4 -right-4 bg-card border border-border rounded-lg px-4 py-2 shadow-lg">
-                <p className="text-sm font-mono text-primary">3+ Years Exp.</p>
+                <p className="text-sm font-mono text-primary">4+ Years Exp.</p>
               </div>
             </div>
           </div>

@@ -1,8 +1,8 @@
-import type React from "react"
+import { ThemeProvider } from "@/components/theme-provider"
+import { Analytics } from "@vercel/analytics/next"
 import type { Metadata } from "next"
 import { Inter, JetBrains_Mono } from "next/font/google"
-import { Analytics } from "@vercel/analytics/next"
-import { ThemeProvider } from "@/components/theme-provider"
+import type React from "react"
 import "./globals.css"
 
 const _inter = Inter({ subsets: ["latin"] })
@@ -14,8 +14,7 @@ export const metadata: Metadata = {
     template: "%s | Fardan Nozami Ajitama",
   },
   description:
-    "Backend Developer with 3+ years experience specializing in Laravel, Golang, Node.js, PostgreSQL, and MySQL",
-  generator: "v0.app",
+    "Backend Developer with 4+ years experience specializing in Laravel, Golang, Node.js, PostgreSQL, and MySQL",
   icons: {
     icon: "/ajitama.png",
     shortcut: "/ajitama.png",
@@ -24,7 +23,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Fardan Nozami Ajitama - Backend Developer",
     description:
-      "Backend Developer with 3+ years experience specializing in Laravel, Golang, Node.js, PostgreSQL, and MySQL",
+      "Backend Developer with 4+ years experience specializing in Laravel, Golang, Node.js, PostgreSQL, and MySQL",
     url: "/",
     siteName: "Fardan Nozami Ajitama",
     locale: "id_ID",
