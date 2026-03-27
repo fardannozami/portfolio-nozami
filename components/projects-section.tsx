@@ -28,6 +28,45 @@ const formatRole = (role: string) =>
 
 const projects: Project[] = [
   {
+    title: "WA Blast Service",
+    description:
+      "Layanan pengiriman pesan WhatsApp massal (WA Blast) yang dibangun dengan Golang untuk performa tinggi, reliabilitas maksimal, dan integrasi mudah.",
+    technologies: ["Golang", "WhatsApp API", "REST API", "PostgreSQL"],
+    live: "https://wa.ajitama.dev",
+    github: "https://github.com/fardannozami/wa",
+  },
+  {
+    title: "Lapor Bot (Gamification)",
+    description:
+      "Bot WhatsApp untuk mencatat laporan aktivitas olahraga di dalam grup dengan fitur gamifikasi yang menarik untuk meningkatkan keterlibatan komunitas.",
+    technologies: ["Golang", "WhatsApp Bot", "Gamification", "SQLite"],
+    live: "",
+    github: "https://github.com/fardannozami/lapor-bot",
+  },
+  {
+    title: "Shohibul Quran Bot",
+    description:
+      "Bot WhatsApp dengan fitur gamifikasi yang dirancang untuk memotivasi pengguna agar lebih semangat dan konsisten dalam tilawah Al-Qur'an.",
+    technologies: ["Golang", "WhatsApp Bot", "Gamification", "SQLite"],
+    live: "",
+    github: "https://github.com/fardannozami/shohibul-quran-bot",
+  },
+  {
+    title: "Ship Management System",
+    description:
+      "Sistem manajemen kapal berbasis SPA & PWA untuk mengelola operasional kapal, user role kompleks, dan workflow perusahaan pelayaran.",
+    technologies: [
+      "Laravel 12",
+      "Inertia",
+      "Vue.js",
+      "SPA",
+      "PWA",
+      "PostgreSQL",
+    ],
+    live: "https://javaoceanmanagement.cloud",
+    github: null,
+  },
+  {
     title: "Jemput Jodohmu",
     description:
       "Platform matchmaking berbasis web dengan sistem keanggotaan dan manajemen user. Dibangun untuk performa stabil dan deployment sederhana.",
