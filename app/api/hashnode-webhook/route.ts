@@ -69,13 +69,30 @@ export async function POST(req: Request) {
       `🔥 Webhook received${eventType ? ` (${eventType})` : ""}, refreshing posts...`
     )
 
-    // Raw posts dari Hashnode
+    // 1. Ambil posts lama dari Blob
+    const { loadPostsFromBlob } = await import("@/lib/storage")
+    const existingPosts = await loadPostsFromBlob()
+
+    // 2. Ambil posts terbaru dari Hashnode
     const rawPosts = await getAllBlogPosts()
 
-    // Simpan versi CLEAN ke local file
-    await savePostsToBlob(rawPosts)
+    // 3. Gabungkan (Merge) berdasarkan slug
+    // Hashnode posts jadi prioritas utama jika ada slug yang sama
+    const postsMap = new Map()
+    
+    // Masukkan data lama dulu
+    existingPosts.forEach(post => postsMap.set(post.slug, post))
+    
+    // Masukkan/Update dengan data Hashnode (overwrite if same slug)
+    rawPosts.forEach(post => postsMap.set(post.slug, post))
 
-    console.log("✅ Posts updated locally")
+    const mergedPosts = Array.from(postsMap.values())
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+
+    // 4. Simpan versi MERGED ke Blob
+    await savePostsToBlob(mergedPosts)
+
+    console.log("✅ Posts updated and merged successfully")
 
     return NextResponse.json({ success: true })
   } catch (error) {
