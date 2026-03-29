@@ -1,6 +1,7 @@
+import { BlogPost } from "./blog-data"
 import { put } from "@vercel/blob"
 
-export async function savePostsToBlob(posts: any) {
+export async function savePostsToBlob(posts: BlogPost[]) {
   const json = JSON.stringify(posts, null, 2)
 
   const { url } = await put("posts.json", Buffer.from(json), {
@@ -12,7 +13,7 @@ export async function savePostsToBlob(posts: any) {
   return url // link permanen
 }
 
-export async function loadPostsFromBlob() {
+export async function loadPostsFromBlob(): Promise<BlogPost[]> {
   try {
     const res = await fetch(process.env.BLOB_BASE_URL + "/posts.json")
 

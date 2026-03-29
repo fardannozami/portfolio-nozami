@@ -1,4 +1,4 @@
-import { getAllBlogPosts } from "@/lib/blog-data"
+import { BlogPost, getAllBlogPosts } from "@/lib/blog-data"
 import { savePostsToBlob } from "@/lib/storage"
 import { NextResponse } from "next/server"
 import { createHmac, timingSafeEqual } from "node:crypto"
@@ -78,13 +78,13 @@ export async function POST(req: Request) {
 
     // 3. Gabungkan (Merge) berdasarkan slug
     // Hashnode posts jadi prioritas utama jika ada slug yang sama
-    const postsMap = new Map()
+    const postsMap = new Map<string, BlogPost>()
     
     // Masukkan data lama dulu
-    existingPosts.forEach(post => postsMap.set(post.slug, post))
+    existingPosts.forEach((post: BlogPost) => postsMap.set(post.slug, post))
     
     // Masukkan/Update dengan data Hashnode (overwrite if same slug)
-    rawPosts.forEach(post => postsMap.set(post.slug, post))
+    rawPosts.forEach((post: BlogPost) => postsMap.set(post.slug, post))
 
     const mergedPosts = Array.from(postsMap.values())
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
