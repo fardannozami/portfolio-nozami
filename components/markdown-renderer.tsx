@@ -57,6 +57,18 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
     while (i < lines.length) {
       const line = lines[i]
 
+      // Horizontal Rule (supports ---, ***, ___ and * * *, - - - , etc.)
+      if (/^\s*([*_-])(\s*\1){2,}\s*$/.test(line)) {
+        parts.push(
+          <hr
+            key={i}
+            className="my-8 border-border"
+          />
+        )
+        i++
+        continue
+      }
+
       // Check for code block
       if (line.trim().startsWith("```")) {
         const language = line.trim().replace("```", "") || "text"
@@ -73,26 +85,78 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
         continue
       }
 
-      // Ordered list (supports escaped markers like "1\.")
-      const orderedMatch = line.match(/^(\d+)\\?\.\s+(.*)$/)
-      if (orderedMatch) {
-        const startNumber = Number(orderedMatch[1])
+      // Unordered list (supports * and -, including indented ones)
+      const ulMatch = line.match(/^(\s*)(\*|-)\s+(.*)$/)
+      if (ulMatch) {
         const items: React.ReactNode[] = []
         let currentIndex = i
 
         while (currentIndex < lines.length) {
           const currentLine = lines[currentIndex]
-          const match = currentLine.match(/^(\d+)\\?\.\s+(.*)$/)
+          
+          // Skip blank lines but continue the list if the next line matches
+          if (!currentLine.trim()) {
+            currentIndex++
+            continue
+          }
+
+          const match = currentLine.match(/^(\s*)(\*|-)\s+(.*)$/)
           if (!match) break
 
+          const indentLevel = Math.floor(match[1].length / 2)
           items.push(
-            <li key={`${currentIndex}-li`} dangerouslySetInnerHTML={{ __html: formatInline(match[2]) }} />,
+            <li 
+              key={`${currentIndex}-li`} 
+              className="list-disc mb-1"
+              style={{ marginLeft: `${indentLevel * 1.5}rem` }}
+              dangerouslySetInnerHTML={{ __html: formatInline(match[3]) }} 
+            />,
           )
           currentIndex++
         }
 
         parts.push(
-          <ol key={`${i}-ol`} start={startNumber} className="list-decimal pl-5 space-y-2 text-muted-foreground mb-4">
+          <ul key={`${i}-ul`} className="pl-5 space-y-1 text-muted-foreground mb-4">
+            {items}
+          </ul>,
+        )
+        i = currentIndex
+        continue
+      }
+
+      // Ordered list (supports indented ones)
+      const orderedMatch = line.match(/^(\s*)(\d+)\\?\.\s+(.*)$/)
+      if (orderedMatch) {
+        const startNumber = Number(orderedMatch[2])
+        const items: React.ReactNode[] = []
+        let currentIndex = i
+
+        while (currentIndex < lines.length) {
+          const currentLine = lines[currentIndex]
+          
+          // Skip blank lines but continue the list if the next line matches
+          if (!currentLine.trim()) {
+            currentIndex++
+            continue
+          }
+
+          const match = currentLine.match(/^(\s*)(\d+)\\?\.\s+(.*)$/)
+          if (!match) break
+
+          const indentLevel = Math.floor(match[1].length / 2)
+          items.push(
+            <li 
+              key={`${currentIndex}-li`} 
+              className="list-decimal mb-1"
+              style={{ marginLeft: `${indentLevel * 1.5}rem` }}
+              dangerouslySetInnerHTML={{ __html: formatInline(match[3]) }} 
+            />,
+          )
+          currentIndex++
+        }
+
+        parts.push(
+          <ol key={`${i}-ol`} start={startNumber} className="pl-5 space-y-1 text-muted-foreground mb-4">
             {items}
           </ol>,
         )
@@ -194,18 +258,6 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             className="text-xl font-semibold text-foreground mt-6 mb-2"
             dangerouslySetInnerHTML={{ __html: formatInline(line.replace("### ", "")) }}
           />,
-        )
-        i++
-        continue
-      }
-
-      // Horizontal Rule
-      if (/^---+$/.test(line.trim())) {
-        parts.push(
-          <hr
-            key={i}
-            className="my-6 border-border"
-          />
         )
         i++
         continue
