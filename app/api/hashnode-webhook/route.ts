@@ -1,7 +1,7 @@
-import { createHmac, timingSafeEqual } from "node:crypto"
-import { NextResponse } from "next/server"
 import { getAllBlogPosts } from "@/lib/blog-data"
 import { savePostsToBlob } from "@/lib/storage"
+import { NextResponse } from "next/server"
+import { createHmac, timingSafeEqual } from "node:crypto"
 
 type SignatureParts = {
   timestamp: string
@@ -42,7 +42,7 @@ export async function POST(req: Request) {
     const secret = process.env.HASHNODE_WEBHOOK_SECRET
 
     if (!secret) {
-      console.error("❌ HASHNODE_WEBHOOK_SECRET is not set")
+      console.error("❌ HASHNODE_WEBHOOK_SECRET is not set yet")
       return NextResponse.json({ error: "Server not configured" }, { status: 500 })
     }
 
