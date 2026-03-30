@@ -1,6 +1,8 @@
 import type React from "react"
-
 import { CodeBlock } from "./code-block"
+import { Separator } from "./ui/separator"
+
+const HR_REGEX = /^\s*([*_-])(\s*\1){2,}\s*$/
 
 interface MarkdownRendererProps {
   content: string
@@ -58,13 +60,8 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
       const line = lines[i]
 
       // Horizontal Rule (supports ---, ***, ___ and * * *, - - - , etc.)
-      if (/^\s*([*_-])(\s*\1){2,}\s*$/.test(line)) {
-        parts.push(
-          <hr
-            key={i}
-            className="my-8 border-border"
-          />
-        )
+      if (HR_REGEX.test(line)) {
+        parts.push(<Separator key={i} className="my-8" />)
         i++
         continue
       }
@@ -101,7 +98,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           }
 
           const match = currentLine.match(/^(\s*)(\*|-)\s+(.*)$/)
-          if (!match) break
+          if (!match || HR_REGEX.test(currentLine)) break
 
           const indentLevel = Math.floor(match[1].length / 2)
           items.push(
@@ -141,7 +138,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           }
 
           const match = currentLine.match(/^(\s*)(\d+)\\?\.\s+(.*)$/)
-          if (!match) break
+          if (!match || HR_REGEX.test(currentLine)) break
 
           const indentLevel = Math.floor(match[1].length / 2)
           items.push(
